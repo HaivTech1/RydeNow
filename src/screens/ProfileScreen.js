@@ -24,9 +24,11 @@ const ProfileScreen = ({ navigation }) => {
             </View>
 
             <View className="flex-row items-center space-x-1 my-3 mx-5">
-              <Image source={require('../../assets/images/profile.png')} 
-                className="rounded-full w-[45px] h-[45px] bg-gray-300 p-4 border-2 border-white" 
-              />
+              <View className="bg-white border border-white rounded-full">
+                <Image source={require('../../assets/images/profile.png')} 
+                  className="rounded-full w-[55px] h-[55px] p-4" 
+                />
+              </View>
               <View>
                 <Text className="text-white">Ebunoluwa Osifuye</Text>
                 <View className="flex-row items-center">
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH - 50,
     height: 150,
     zIndex: 100,
-    top: -50,
+    top: -60,
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignSelf: 'center',
