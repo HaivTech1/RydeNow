@@ -1,6 +1,6 @@
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 
 export const useNotifications = () => {
     const registerForPushNotificationsAsync = async () => {
@@ -17,9 +17,9 @@ export const useNotifications = () => {
             return;
           }
           token = (await Notifications.getExpoPushTokenAsync()).data;
-          console.log("Token", token);
+          console.log("Token ", token);
         } else {
-          alert('Must use physical device for Push Notifications');
+          Alert.alert('Must use physical device for Push Notifications');
         }
       
         if (Platform.OS === 'android') {  
