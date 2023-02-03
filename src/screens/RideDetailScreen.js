@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Dimensions } from 'react-native'
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Dimensions, Modal, Pressable } from 'react-native'
 import { colors, parameters } from '../global/styles'
 import { ChevronLeftIcon } from 'react-native-heroicons/solid';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { filterData, carsAround } from '../global/data';
 import { mapStyle } from '../global/mapStyle'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -26,6 +27,8 @@ const RideDetailScreen = ({route, navigation}) => {
       }
     }
 
+    const [modalVisible, setModalVisible] = useState(true);
+
   return (
     <SafeAreaView style={styles.container}>
         <View className="mx-5 my-5">
@@ -38,7 +41,7 @@ const RideDetailScreen = ({route, navigation}) => {
             </View>
             <View className="mt-5 flex-row justify-between items-center">
                 <View>
-                  <Text className="font-semibold text-md">{item.state}</Text>
+                  <Text className="font-semibold text-[15px]">{item.state}</Text>
                   <Text className="text-[12px] text-gray-300">{item.date}</Text>
                 </View>
                 <View>
@@ -91,11 +94,33 @@ const RideDetailScreen = ({route, navigation}) => {
 
 
           <View className="flex-row justify-center mt-10">
-            <TouchableOpacity style={styles.button1}>
+            <TouchableOpacity style={styles.button1} onPress={() => setModalVisible(true)}>
                 <Text className="text-white font-medium text-lg">Get help with ride</Text>
             </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <Pressable style={styles.outsideModal}
+          onPress={(event) => { if (event.target == event.currentTarget) { 
+            setModalVisible(false); } }} >
+          <View style={styles.modal}>
+            <View>
+              <TouchableOpacity onPress={() => setModalVisible(false)} className="flex-row items-center justify-start space-x-2 p-5">
+                <FontAwesome5 name="times" size={15} color="black" />
+                <Text>Get Help</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View className="mx-5 mt-3 font-semibold">
+              <Text>Ride Issues</Text>
+            </View>
+
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -119,5 +144,38 @@ const styles = StyleSheet.create({
     borderRadius:20,
     alignItems:"center",
     justifyContent:"center",
+  },
+  modal: {
+    flex: 1,
+    padding: 5,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: SCREEN_WIDTH
+  },
+  /* The content of the modal takes all the vertical space not used by the header. */
+  modalContent: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  /* The header takes up all the vertical space not used by the close button. */
+  modalHeaderContent: {
+    flexGrow: 1,
+  },
+  modalHeaderCloseText: {
+    textAlign: "center",
+    paddingLeft: 5,
+    paddingRight: 5
+  },
+  outsideModal: {
+    backgroundColor: "rgba(1, 1, 1, 0.2)",
+    flex: 1,
   }
 });

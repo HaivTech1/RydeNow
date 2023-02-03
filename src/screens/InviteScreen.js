@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, Dimensions, TextInput } from 'react-native'
 import React from 'react'
 import { colors, parameters } from '../global/styles'
 import { ChevronLeftIcon } from 'react-native-heroicons/solid'
-import { Icon } from 'react-native-vector-icons/Icon';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -16,33 +16,36 @@ const InviteScreen = ({ navigation }) => {
                     <ChevronLeftIcon size={20} fill="black" />
                 </View>
             </TouchableOpacity>
-            <Text className="font-normal text-[15px]">About</Text>
+            <Text className="font-normal text-[15px]">Invite friends</Text>
         </View>
 
         <View className="mt-10 mx-3">
               <View className="mx-3">
-                  <Image source={require('../../assets/images/invite.png')} />
-                  <Text>Refer friend and earn $10 dollars on first trip</Text>
+                  <View className="flex-row justify-center mt-10">
+                        <Image source={require('../../assets/images/friends.png')} />
+                  </View>
+                  <Text className="text-center text-gray-600 text-[12px]">Refer friend and earn $10 dollars on first trip</Text>
               </View>
 
-              <View>
-                  <Text>Referral link</Text>
+              <View className="mt-5">
+                  <Text className="mb-1">Referral link</Text>
 
-                  <View style={styles.searchSection}>
-                      <Icon style={styles.searchIcon} name="ios-search" size={20} color="#000"/>
-
+                  <View className="flex-row items-center border border-black rounded-lg p-1">
                       <TextInput
                           style={styles.input}
-                          placeholder="User Nickname"
-                          onChangeText={(searchString) => {this.setState({searchString})}}
+                          placeholder="4575893"
+                          onChangeText={(text) => {console.log(text)}}
                           underlineColorAndroid="transparent"
                       />
+                      <TouchableOpacity>
+                        <Ionicons style={styles.searchIcon} name="copy-sharp" size={20} color="#000"/>
+                      </TouchableOpacity>
                   </View>
               </View>
               
-              <View className="flex-row justify-center my-5">
+              <View className="flex-row justify-center my-10">
                   <TouchableOpacity style={styles.button1}>
-                      <Text className="text-white font-medium text-lg">Edit Details</Text>
+                      <Text className="text-white font-medium text-[15px]">Share Code</Text>
                   </TouchableOpacity>
               </View>
         </View>
@@ -65,6 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    marginTop: 10,
   },
   searchIcon: {
       padding: 10,
@@ -74,13 +78,13 @@ const styles = StyleSheet.create({
       paddingTop: 10,
       paddingRight: 10,
       paddingBottom: 10,
-      paddingLeft: 0,
+      paddingLeft: 5,
       backgroundColor: '#fff',
       color: '#424242',
   },
   button1: {
-    height: 50,
-    width: 220,
+    height: 45,
+    width: SCREEN_WIDTH - 50,
     backgroundColor: '#FF6600',
     borderRadius:20,
     alignItems:"center",

@@ -14,12 +14,12 @@ const AboutScreen = ({ navigation }) => {
             </TouchableOpacity>
             <Text className="font-normal text-[15px]">About</Text>
         </View>
-        <View className="mt-4 mx-3">
-            <Text>
+        <View className="mt-6 mx-3">
+            <Text className="text-gray-700">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ligula elit, sodales at varius sed, malesuada in quam. In dignissim tortor sit amet ligula condimentum, non pharetra diam vestibulum. Aliquam vitae egestas diam. Morbi cursus id felis non congue. Nullam at nibh ullamcorper, fermentum justo imperdiet, sodales odio. 
             </Text>
 
-            <Text className="mt-3">
+            <Text className="mt-5 text-gray-700">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ligula elit, sodales at varius sed, malesuada in quam. In dignissim tortor sit amet ligula condimentum, non pharetra diam vestibulum. Aliquam vitae egestas diam. Morbi cursus id felis non congue. Nullam at nibh ullamcorper, fermentum justo imperdiet, sodales odio. 
             </Text>
         </View>
