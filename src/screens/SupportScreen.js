@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Linking } from 'react-native'
 import React from 'react'
 import { colors, parameters } from '../global/styles'
 import { ChatBubbleBottomCenterIcon, ChevronLeftIcon, PhoneIcon } from 'react-native-heroicons/solid';
@@ -9,22 +9,26 @@ const SupportScreen = ({ navigation }) => {
     {
       id: 1,
       title: 'Phone',
-      icon: <PhoneIcon />,
+      link: '09066100815',
+      Icon: PhoneIcon,
     },
     {
       id: 2,
       title: 'Chat with Us',
-      icon: <ChatBubbleBottomCenterIcon />,
+      link: 'facebook.com',
+      Icon: ChatBubbleBottomCenterIcon,
     },
     {
       id: 3,
       title: 'Facebook',
-      icon: <ChatBubbleBottomCenterIcon />,
+      link: 'facebook.com',
+      Icon: ChatBubbleBottomCenterIcon,
     },
     {
-      id: 3,
+      id: 4,
       title: 'Twitter',
-      icon: <ChatBubbleBottomCenterIcon />,
+      link: 'twitter.com',
+      Icon: ChatBubbleBottomCenterIcon,
     },
   ];
 
@@ -43,14 +47,14 @@ const SupportScreen = ({ navigation }) => {
 
             <FlatList 
               data={data}
-              keyExtractor={(item, i) => i.toString()}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({item}) => (
-                <View className="mt-1">
-                    <View className="bg-gray-200 rounded-lg flex-row items-center space-x-2">
-                        <item.icon/>
-                        <Text className="text-gray-500 text-[10px]">{item.type}</Text>
+                <TouchableOpacity onPress={() => Linking.openURL(item.link)} className="mt-1">
+                    <View className="bg-gray-200 rounded-lg flex-row items-center space-x-2 p-3 my-1">
+                        {/* <item.Icon /> */}
+                        <Text className="text-gray-500 text-[10px]">{item.title}</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
         </View>
