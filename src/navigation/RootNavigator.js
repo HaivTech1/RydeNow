@@ -8,12 +8,13 @@ import useApp from '../contexts/context';
 
 export default function RoootNavigator(){
 
-    const { user, setUser } = useApp();
-    const [isLoading, setIsLoading] = React.useState(false);
-    console.log(user);
+    const { isLoading, token } = useApp();
+    
+    console.log(token);
 
     useEffect(() => {
-    }, [user]);
+        
+    }, [token]);
 
     if (isLoading) {
         return (
@@ -23,7 +24,7 @@ export default function RoootNavigator(){
 
     return(
         <NavigationContainer>
-            {user ? <AppStack /> : <AuthStack /> }
+            {token !== null ? <AppStack /> : <AuthStack /> }
             <StatusBar style='light' backgroundColor='#FF6600' translucent={true} />
         </NavigationContainer>
     )

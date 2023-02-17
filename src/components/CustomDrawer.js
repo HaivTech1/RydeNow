@@ -18,7 +18,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ConfirmModal from './ConfirmModal';
 
 const CustomDrawer = props => {
-    const {user, signout} = useApp();
+    const {user, signout, setUser, setToken} = useApp();
     const navigation = useNavigation();
     const [visible, setVisible] = useState(false);
     const [state, setState] = useState(false);
@@ -29,10 +29,11 @@ const CustomDrawer = props => {
     const confirm = (state) => {
       setState(state);
       if (state) {
-        const res = signout();
-        if(res) navigation.navigate('HomeScreen');
+        signout();
         setVisible(false);
-    }
+        // setUser(null);
+        setToken(null);
+      }
     }
   
     return (
@@ -59,7 +60,7 @@ const CustomDrawer = props => {
                             flexDirection: 'column',
                             fontWeight: 'bold'
                         }}>
-                        Osifuye Ebunoluwa
+                        {user?.name}
                     </Text>
                     
                     <View style={{flexDirection: 'row'}}>

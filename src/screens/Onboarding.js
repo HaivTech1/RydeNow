@@ -24,7 +24,6 @@ export default function Onboarding() {
     const scrollTo = async () => {
         if (currentIndex < slides.length - 1) {
             slidesRef.current.scrollToIndex({index: currentIndex + 1})
-            console.log(currentIndex)
         }else{
            try {
              await AsyncStorage.setItem('@viewedOnboarding', 'true');

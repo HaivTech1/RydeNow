@@ -28,7 +28,7 @@ const DestinationScreen = ({route}) => {
                         <ChevronLeftIcon size={20} fill="black" />
                     </View>
                 </TouchableOpacity>
-                <Text className="font-bold text-lg">Book a ride</Text>
+                <Text className="font-normal text-lg">Book a ride</Text>
             </View>
         </View>
 

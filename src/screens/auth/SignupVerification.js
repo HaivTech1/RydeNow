@@ -26,14 +26,13 @@ const SignupVerification = () => {
         setIsLoading(true);
         const res = await sendCode(formattedValue);
         if (!res.status){
-            setIsLoading(false);
             updateNotification(setMessage, res.error, 'error');
         }else{
             updateNotification(setMessage, res.message, 'success');
-            setIsLoading(false);
             setFormattedValue('');
             navigation.navigate('VerificationScreen', {phone: res.phone, expires: res.expires});
         }
+        setIsLoading(false);
     }
 
   return (

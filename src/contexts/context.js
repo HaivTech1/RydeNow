@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useReducer, useState } from 'react';
+import { useEffect } from 'react';
 import { useContext } from 'react';
 import { OriginReducer, DestinationReducer, PaymentReducer } from  '../reducers/reducer'
 import Client from '../utils/api/client';
@@ -55,12 +56,35 @@ export const PaymentContextProvider = (props)=>{
 
 export const AppProvider = ({children}) => {
 
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const isLoggedIn = async () => {
+        try {
+            setIsLoading(true);
+          let info = await AsyncStorage.getItem('user');
+          let token = await AsyncStorage.getItem('token');
+          console.log('AuthToken is: ', token);
+    
+          if (token) {
+            setToken(token);
+            setUser(JSON.parse(info));
+          }
+          setIsLoading(false);
+        } catch (error) {
+          console.log('is logged in error');
+        }
+    };
+
+    useEffect(() => {
+        isLoggedIn();
+    }, []);
+
 
     const sendCode = async (phone) => {
         try {
-          const {data} = await Client.post('/auth/send/code', {phone});
-          console.log(data);
+            const {data} = await Client.post('/auth/send/code', {phone});
           return data;
         } catch (error) {
           return sendError(error);
@@ -77,7 +101,19 @@ export const AppProvider = ({children}) => {
         }
     };
 
+    const login = async (phone, password) => {
+        try {
+            console.log(phone, password);
+          const {data} = await Client.post('/auth/login', {phone, password});
+          return data;
+        } catch (error) {
+          console.log(error)
+          return sendError(error);
+        }
+    };
+
     const register = async values => {
+        console.log(values)
         try {
         const {data} = await Client.post('/auth/register', {...values});
         return data;
@@ -86,19 +122,30 @@ export const AppProvider = ({children}) => {
         }
     };
 
-    const signout = async() => {
-        await AsyncStorage.removeItem('@user');
-        await AsyncStorage.removeItem('@token');
-        return true
+    const signout = async () => {
+        try {
+            // setUser(null);
+            setToken(null);
+            // await AsyncStorage.removeItem('user');
+            await AsyncStorage.removeItem('token');
+        } catch (error) {
+            console.log(error)
+            return false;
+        }
     };
     
     const value = {
+        isLoading,
+        setIsLoading,
         user, 
-        setUser,
+        token,
         sendCode,
         VerifyPhone,
         register,
-        signout
+        signout,
+        login,
+        setUser,
+        setToken
     };
     
       return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

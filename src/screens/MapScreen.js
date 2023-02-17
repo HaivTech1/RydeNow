@@ -107,13 +107,12 @@ const styles=StyleSheet.create( {
       position:"absolute",
       top:25,
       left:12,
-      backgroundColor:colors.white,
       height:40,
       width:40,
       borderRadius:20,
       justifyContent:"center",
       alignItems:"center",
-      marginTop:2,
+      marginTop: 10,
       zIndex: 8
     },
 

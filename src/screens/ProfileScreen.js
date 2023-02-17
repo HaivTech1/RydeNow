@@ -3,8 +3,12 @@ import React from 'react'
 import { colors, parameters } from '../global/styles'
 import { BriefcaseIcon, ChevronLeftIcon, HomeIcon, PencilIcon, StarIcon } from 'react-native-heroicons/solid'
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet'
+import useApp from '../contexts/context'
 
 const ProfileScreen = ({ navigation }) => {
+
+    const {user} = useApp();
+
   return (
     <SafeAreaView style={styles.container}>
          <View className="">
@@ -30,7 +34,7 @@ const ProfileScreen = ({ navigation }) => {
                 />
               </View>
               <View>
-                <Text className="text-white">Ebunoluwa Osifuye</Text>
+                <Text className="text-white">{user?.name}</Text>
                 <View className="flex-row items-center">
                     <StarIcon size={12} fill="yellow" />
                     <Text className="text-[9px] text-white">4.5</Text>

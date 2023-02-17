@@ -1,9 +1,9 @@
-import { View, Text, Image, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity, TextInput, KeyboardAvoidingView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { colors, parameters } from '../../global/styles';
 import { ChevronLeftIcon, PencilIcon } from 'react-native-heroicons/solid';
 import Checkbox from 'expo-checkbox';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CustomFormik from '../../components/CustomFormik';
 import * as yup from 'yup';
 import useApp from '../../contexts/context';
@@ -30,6 +30,7 @@ const validationSchema = yup.object({
 });
 
 const Signup = ({route}) => {
+  const {setUser, setToken} = useApp();
   const { phone } = route.params;
   const {register} = useApp();
   const [isChecked, setIsChecked] = useState(false);
@@ -41,31 +42,31 @@ const Signup = ({route}) => {
   });
 
   const handleSignup = async (values, formikActions) => {
-    values = {...values, phone: phone}
-    const res = await register(values);
-    formikActions.setSubmitting(false);
-    if (!res.status) return updateNotification(setMessage, res.error, 'error');
-    console.log(res.user);
-    await AsyncStorage.setItem('@user', JSON.stringify(res.user));
-    await AsyncStorage.setItem('@token', JSON.stringify(res.token));
-    updateNotification(setMessage, res.message, 'success');
-    formikActions.resetForm();
-    navigation.dispatch(
-      StackActions.replace('HomeScreen'),
-    );
+      values = {...values, phone: phone}
+      const res = await register(values);
+      formikActions.setSubmitting(false);
+      if (!res.status) {
+        updateNotification(setMessage, res.error, 'error');
+      }else{
+        await AsyncStorage.setItem('user', JSON.stringify(res.user));
+        await AsyncStorage.setItem('token', res.token);
+        setUser(JSON.stringify(res.user));
+        setToken(res.token);
+        updateNotification(setMessage, res.message, 'success');
+        formikActions.resetForm();
+        navigation.navigate('LoginScreen', {phone: res.user.phone});
+      }
   };
-
-
 
   return (
     <SafeAreaView style={StyleSheet.container}>
       <View>
           <View>
-            <Image source={require('../../../assets/images/signupImage.png')} resizeMode="cover" style={{ 
+            <Image source={require('../../../assets/images/profileCar.png')} resizeMode="cover" style={{ 
                   width: SCREEN_WIDTH,
                   borderBottomRightRadius: 35,
                   borderBottomLeftRadius: 35,
-                  height: SCREEN_HEIGHT - 500
+                  height: SCREEN_HEIGHT - 450
                 }} 
               />
               <View
@@ -77,7 +78,6 @@ const Signup = ({route}) => {
                     height: '100%',
                     backgroundColor: 'rgba(0,0,0,0.5)',
                     borderBottomRightRadius: 35,
-                    
                     borderBottomLeftRadius: 35
                 }}
               />
@@ -103,18 +103,17 @@ const Signup = ({route}) => {
             <PencilIcon size={20} fill="white" />
           </TouchableOpacity>
       </View>
-
-      {message.text ? (
-            <AppNotification type={message.type} text={message.text} />
-      ) : null}
       
-      <KeyboardAvoidingView className="mt-20 mx-5">
+      <KeyboardAvoidingView className="mt-14 mx-5">
         <CustomFormik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSignup}
         >  
-          
+           {message.text ? (
+            <AppNotification type={message.type} text={message.text} />
+          ) : null}
+
           <View>
                 <Text className="font-medium text-gray-500 mb-1">Name</Text>
                 <InputField
@@ -123,14 +122,24 @@ const Signup = ({route}) => {
                 />
           </View>
 
-          <View className="mt-6">
+          <View className="mt-2">
                 <Text className="font-medium text-gray-500 mb-1">Email Address</Text>
                 <InputField 
                   name="email"
                   keyboardType="email-address"
                   placeholder="Enter Email Address"
                 />
-          </View>  
+          </View> 
+
+          <View className="mt-2">
+                <Text className="font-medium text-gray-500 mb-1">Password</Text>
+                <InputField 
+                  name="password"
+                  maxLength={4}
+                  keyboardType="number-pad"
+                  placeholder="4 digit password"
+                />
+          </View> 
 
           <View className="flex-row items-center text-lg mt-6 space-x-3">
               <Checkbox
@@ -144,7 +153,7 @@ const Signup = ({route}) => {
               <Text>I agree to <Text className="text-[#FF6600]">Terms and conditions</Text></Text>
           </View> 
 
-          <View className="mx-5 mt-20">
+          <View className="mx-5 mt-12">
             <CustomButton label={'Create Account'} onPress={handleSignup} isChecked={isChecked} />
           </View>
         </CustomFormik>       

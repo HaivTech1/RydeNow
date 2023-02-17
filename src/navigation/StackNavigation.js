@@ -53,25 +53,8 @@ export function HomeStack() {
 
     return (
         <Home.Navigator>
-            {loading ? (
-                <Home.Screen 
-                    name="LoadingScreen" 
-                    component={LoadingScreen}
-                    options={{ 
-                        headerShown:false,
-                    }} 
-                />
-            ) : viewedOnboarding ? (
-                <Home.Screen 
-                    name="OnboardingScreen" 
-                    component={Onboarding}
-                    options={{ 
-                        headerShown:false,
-                    }} 
-                />
-            ) : (
-                <Home.Screen name="HomeScreen" component={HomeScreen} />
-            )}
+           
+            <Home.Screen name="HomeScreen" component={HomeScreen} />
             
             <Home.Screen 
                 name="MapScreen" 

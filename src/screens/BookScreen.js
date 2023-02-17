@@ -40,7 +40,7 @@ const BookScreen = () => {
                         <ChevronLeftIcon size={20} fill="black" />
                     </View>
                 </TouchableOpacity>
-                <Text className="font-bold text-lg">Book a ride</Text>
+                <Text className="font-normal text-lg">Book a ride</Text>
             </View>
             <TouchableOpacity>
                 <View style ={styles.view3}>
@@ -78,7 +78,7 @@ const BookScreen = () => {
 
                         <View className="mt-5">
                           <Text className="mb-1">Destination Location</Text>
-                          <TouchableOpacity onPress ={()=>navigation.navigate("DestinationScreen")} className="flex-row items-center border border-black px-2 rounded-sm">
+                          <TouchableOpacity onPress ={()=>navigation.navigate("DestinationScreen", {type: 'ride'})} className="flex-row items-center border border-black px-2 rounded-sm">
                               <MapPinIcon size={16} fill="red" />
                               <View style = {styles.view6}>
                                   <Text style ={styles.text1}>{destination?.name}</Text>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, SafeAreaView, Image, TouchableOpacity, Dimensions, StyleSheet} from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { 
   ChevronDownIcon,
   Bars3BottomLeftIcon,
@@ -13,10 +13,17 @@ import * as Location from 'expo-location';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { filterData, carsAround } from '../global/data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useApp from '../contexts/context';
 
 export default function HomeScreen() {
 
   const [latlong, setLatLong] = useState({})
+  const [address, setAddress] = useState({
+    city: '',
+    country: '',
+  });
+
+  const {user} = useApp();
 
   const checkPermission = async () => {
     const hasPermission = await Location.requestForegroundPermissionsAsync();
@@ -42,8 +49,24 @@ export default function HomeScreen() {
       const { 
         coords: { latitude, longitude } 
       } = await Location.getCurrentPositionAsync();
-
       setLatLong({latitude: latitude, longitude: longitude});
+
+      let add = await Location.reverseGeocodeAsync({
+        latitude : latitude,
+        longitude : longitude
+      });
+
+      let city;
+      let country;
+
+      add.find( p => {
+        city = p.city,
+        country = p.country
+        setAddress({
+          city: city,
+          country: country
+        })
+      });
 
     } catch (error) {
       console.log(error);
@@ -70,11 +93,14 @@ export default function HomeScreen() {
 
   useEffect(() => {
     checkPermission();
-    getLocation();
     navigation.setOptions({
       headerShown: false,
     });
     console.log(latlong);
+  }, [])
+
+  useEffect(() => {
+    getLocation();
   }, [])
 
   const clearOnboarding = async () => {
@@ -88,16 +114,16 @@ export default function HomeScreen() {
   
   return (
     <SafeAreaView>
-      <View className="p-1 h-[20%] bg-white">
+      <View className="p-1 h-[20%] bg-white mt-4">
         <View className="flex-row justify-between items-center mt-5">
             <View className="flex-row items-center space-x-3 p-3">
 
-              <TouchableOpacity onPress={() => navigation.openDrawer()} className="rounded-full t.shadowXl py-2 px-4">
+              <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())} className="rounded-full t.shadowXl py-2 px-4">
                 <Bars3BottomLeftIcon size={22} color="#000" fill="black" />
               </TouchableOpacity>
               
               <View className="flex">
-                  <Text className="font-medium">Hi there</Text>
+                  <Text className="font-medium">Hi {user?.name}</Text>
                   <Text className="font-medium">How are you feeling today?</Text>
               </View>
             </View>
@@ -107,10 +133,10 @@ export default function HomeScreen() {
             </TouchableOpacity>
         </View>
 
-        <View className="flex-row space-x-3 ml-10">
-            <MapPinIcon size={24} fill="black" />
-            <Text className="font-medium">Lagos, Nigeria</Text>
-            <ChevronDownIcon size={20} fill="black" />
+        <View className="flex-row space-x-1 ml-7">
+            <MapPinIcon size={20} fill="black" />
+            <Text className="font-medium">{address.city}, {address.country}</Text>
+            <ChevronDownIcon size={18} fill="black" />
         </View>
       </View>
 

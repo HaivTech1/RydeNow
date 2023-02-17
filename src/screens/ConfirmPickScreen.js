@@ -5,11 +5,32 @@ import { ChevronLeftIcon } from 'react-native-heroicons/solid';
 import MapComponent from '../components/MapComponent';
 import { DestinationContext, OriginContext } from '../contexts/context';
 import { useNavigation } from '@react-navigation/native';
+import { GOOGLE_MAPS_APIKEY } from '@env'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ConfirmPickScreen = () => {
+   const [route, setRoute] = useState(null);
+   const [totalTime, setTotalTime] = useState(null);
+
+  const VEHICLE_PRICES = {
+    car: {
+      fuelEfficiency: 25, // miles per gallon
+      fuelPrice: 3.5, // dollars per gallon
+      pricePerMile: 0.14, // dollars per mile
+    },
+    motorcycle: {
+      fuelEfficiency: 50, // miles per gallon
+      fuelPrice: 3.5, // dollars per gallon
+      pricePerMile: 0.07, // dollars per mile
+    },
+    van: {
+      fuelEfficiency: 20, // miles per gallon
+      fuelPrice: 4.0, // dollars per gallon
+      pricePerMile: 0.20, // dollars per mile
+    },
+  };
 
     const navigation = useNavigation();
     const {
@@ -31,6 +52,54 @@ const ConfirmPickScreen = () => {
         name: destination.name
     })
 
+    const fetchRoute = async () => {
+      if (userOrigin && userDestination) {
+        const apiUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${userOrigin.latitude},${userOrigin.longitude}&destination=${userDestination.latitude},${userDestination.longitude}&key=${GOOGLE_MAPS_APIKEY}`;
+  
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+  
+        if (data.status === 'OK') {
+          // console.log(data.routes[0])
+          setRoute(data.routes[0]);
+        }
+      }
+    };
+  
+    const getDuration = () => {
+      if (route) {
+        // console.log(route.legs[0].duration.text);
+        setTotalTime(route.legs[0].duration.text);
+        return route.legs[0].duration.text;
+      }
+  
+      return null;
+    };
+
+    const getDistance = () => {
+      if (route) {
+        console.log(route.legs[0].distance.value);
+        return route.legs[0].distance.value;
+      }
+  
+      return null;
+    };
+
+    const getPrice = () => {
+      const distance = getDistance();
+      const { fuelEfficiency, fuelPrice, pricePerMile } = VEHICLE_PRICES[vehicle];
+  
+      if (distance) {
+        const gallons = distance / fuelEfficiency;
+        const price = gallons * fuelPrice;
+        const totalPrice = price + distance * pricePerMile;
+        console.log(totalPrice.toFixed(2));
+        return `$${totalPrice.toFixed(2)}`;
+      }
+  
+      return null;
+    };
+
     useEffect(() => {
       setUserOrigin({
         latitude: origin.latitude,
@@ -41,7 +110,12 @@ const ConfirmPickScreen = () => {
         latitude: destination.latitude,
         longitude: destination.longitude,
         name: destination.name
-      })
+      });
+      fetchRoute();
+      getDuration();
+      getDistance();
+      // getPrice();
+
     }, [origin, destination])
 
   return (
@@ -73,7 +147,7 @@ const ConfirmPickScreen = () => {
          <View className="flex-row justify-between items-center my-5 mx-3">
             <View>
                 <Text className="font-thin">Estimated ride time</Text>
-                <Text className="text-lg font-semibold">45mins</Text>
+                <Text className="text-lg font-semibold">{totalTime}</Text>
             </View>
             <View>
                 <Text className="font-bold text-lg text-blue-700">$1300-$1500</Text>
