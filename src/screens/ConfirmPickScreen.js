@@ -13,6 +13,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const ConfirmPickScreen = () => {
    const [route, setRoute] = useState(null);
    const [totalTime, setTotalTime] = useState(null);
+   const [price, setPrice] = useState(null);
 
   const VEHICLE_PRICES = {
     car: {
@@ -60,7 +61,7 @@ const ConfirmPickScreen = () => {
         const data = await response.json();
   
         if (data.status === 'OK') {
-          // console.log(data.routes[0])
+          console.log(data.routes[0])
           setRoute(data.routes[0]);
         }
       }
@@ -68,7 +69,7 @@ const ConfirmPickScreen = () => {
   
     const getDuration = () => {
       if (route) {
-        // console.log(route.legs[0].duration.text);
+        console.log(route.legs[0].duration.text);
         setTotalTime(route.legs[0].duration.text);
         return route.legs[0].duration.text;
       }
@@ -87,16 +88,16 @@ const ConfirmPickScreen = () => {
 
     const getPrice = () => {
       const distance = getDistance();
-      const { fuelEfficiency, fuelPrice, pricePerMile } = VEHICLE_PRICES[vehicle];
+      const { fuelEfficiency, fuelPrice, pricePerMile } = VEHICLE_PRICES['car'];
   
       if (distance) {
         const gallons = distance / fuelEfficiency;
         const price = gallons * fuelPrice;
         const totalPrice = price + distance * pricePerMile;
         console.log(totalPrice.toFixed(2));
+        setPrice(totalPrice.toFixed(2));
         return `$${totalPrice.toFixed(2)}`;
       }
-  
       return null;
     };
 
@@ -114,9 +115,9 @@ const ConfirmPickScreen = () => {
       fetchRoute();
       getDuration();
       getDistance();
-      // getPrice();
+      getPrice();
 
-    }, [origin, destination])
+    }, [origin, destination, totalTime])
 
   return (
     <View style={styles.container}>
@@ -150,7 +151,7 @@ const ConfirmPickScreen = () => {
                 <Text className="text-lg font-semibold">{totalTime}</Text>
             </View>
             <View>
-                <Text className="font-bold text-lg text-blue-700">$1300-$1500</Text>
+                <Text className="font-bold text-lg text-blue-700">${price}</Text>
             </View>
          </View>
 
