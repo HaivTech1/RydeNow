@@ -11,9 +11,10 @@ import { paymentOptions } from '../global/data';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const BookPayment = () => {
+const BookPayment = ({route, navigation}) => {
 
-    const navigation = useNavigation();
+
+    const {time, price} = route.params;
 
     const {
         origin,
@@ -65,6 +66,7 @@ const BookPayment = () => {
         if(currentPaymentMethod === 'Debit Card'){
           navigation.navigate('AddCardScreen');
         }
+
         if(currentPaymentMethod === 'Card' || currentPaymentMethod === 'PayPal'){
           navigation.navigate('SelectRideScreen');
         }

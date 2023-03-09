@@ -191,7 +191,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   map:{
     height: '100%',
-      width:SCREEN_WIDTH
+      width: SCREEN_WIDTH
   },
   // carsAround: {
   //   width: 28,

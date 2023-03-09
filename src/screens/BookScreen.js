@@ -8,8 +8,7 @@ import { DestinationContext, OriginContext } from '../contexts/context'
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const BookScreen = () => {
-    const navigation = useNavigation();
+const BookScreen = ({route, navigation}) => {
     const {origin,dispatchOrigin} = useContext(OriginContext)
     const [userOrigin,setUserOrigin] = useState({latitude:origin.latitude,
                                                   longitude:origin.longitude})

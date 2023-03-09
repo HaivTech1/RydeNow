@@ -21,7 +21,8 @@ const AddCardScreen = () => {
 
     const handleAddCard = () => {
         setIsLoading(true);
-        navigation.navigate('SelectRideScreen');
+        navigation.goBack();
+        // SelectRideScreen
     }
     
 

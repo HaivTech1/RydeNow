@@ -156,7 +156,10 @@ const ConfirmPickScreen = () => {
          </View>
 
          <View className="flex-row justify-center">
-                <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('BookPayment')}>
+                <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('BookPayment',{
+                  time: totalTime,
+                  price: price
+                })}>
                     <Text className="text-white font-medium text-lg">Confirm</Text>
                 </TouchableOpacity>
          </View>

@@ -5,8 +5,6 @@ import { AntDesign } from "@expo/vector-icons";
 
 const NextButton = ({ percentage, scrollTo }) => {
 
-    console.log(percentage);
-
     const size = 80;
     const strokeWidth = 2;
     const center = size / 2;
